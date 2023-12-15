@@ -1,0 +1,52 @@
+services:
+  db:
+     image: postgres:15
+     volumes:
+      - postgres_data:/var/lib/postgresql/data/
+     ports:
+        - 5432:5432 
+     networks:
+        - c_network
+     environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+  django:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - db
+    networks:
+      - c_network 
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000" 
+  redis:
+    image: redis 
+    ports: 
+        - 6379:6379
+    networks:
+        - c_network 
+  celery: 
+    build:
+        context: ./backend
+    depends_on:
+        - redis 
+    networks: 
+        - c_network
+    command: "celery -A backend worker --loglevel=info" 
+  celery-beat:
+    build:
+        context: ./backend 
+    depends_on:
+        - redis 
+        - celery 
+    networks:
+        - c_network
+    command: "celery -A backend beat --loglevel=info"
+networks:
+    c_network:
+        driver: bridge
+volumes:
+  postgres_data:
