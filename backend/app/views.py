@@ -27,11 +27,11 @@ class ProgressView(View):
         # print(f"We are working on the progress task {task.id}")
         return render(request,"progress.html")
     def post(self,request):
-        tasks.progress_task.delay("progress")
+        tasks.progress_task.delay()
         return HttpResponse("Task launched!")
 class StartProgressTaskView(APIView):
     def post(self,request):
-        progress_task = tasks.progress_task.delay("progress")
+        progress_task = tasks.progress_task.delay()
         return Response(
             data={
                 "message":f"Progress task {progress_task.id} created!",
@@ -43,7 +43,6 @@ class TaskStatusView(APIView):
     def get(self, request):
         task_id = request.GET.get('task_id')
         task_type = request.GET.get('task_type')
-        return Response("Testing?")
         if not task_id or not task_type:
             return Response({'error': 'Task ID is required'}, status=status.HTTP_400_BAD_REQUEST)
         try:

@@ -37,21 +37,22 @@ def beat_task(task_id):
 # @shared_task(name="progress_task")
 
 @app.task(bind=True)
-def progress_task(self,task_id):
+def progress_task(self):
+    task_id = self.request.id
     print(f"Running progress task {task_id}")
     progress = 0
     state = "STARTED"
     send_progress_task_msg(progress,state,task_id)
 
-    state = "RUNNING"
+    state = "IN PROGRESS"
     while progress < 100:
         time.sleep(5)
         progress += 10
         print("Sending progress message")
-        self.update_state(state="IN PROGRESS",meta={"progress":progress})
+        self.update_state(state=state,meta={"progress":progress})
         send_progress_task_msg(progress,state,task_id)
-
-    state = "COMPLETED"
+    state = "SUCCESS"
+    self.update_state(state=state, meta={"progress": progress})
     send_progress_task_msg(progress, state, task_id)
 
     return "Task completed"

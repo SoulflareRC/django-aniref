@@ -31,6 +31,8 @@ services:
   celery: 
     build:
         context: ./backend
+    ports: 
+        - 5555:5555
     depends_on:
         - redis 
         - django 
@@ -48,9 +50,7 @@ services:
     command: "celery -A backend beat --loglevel=info"
   celery-flower:
     build:
-        context: ./backend
-    ports: 
-        - 5555:5555 
+        context: ./backend 
     depends_on:
         - redis 
         - celery 
