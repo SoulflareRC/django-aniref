@@ -19,9 +19,12 @@ services:
     depends_on:
       - redis
       - db
+    volumes: 
+      - shared:/app 
+      - models:/app/models 
     networks:
       - c_network 
-    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000" 
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py makemigrations app && python manage.py migrate && python manage.py runserver 0.0.0.0:8000" 
   redis:
     image: redis 
     ports: 
@@ -34,18 +37,33 @@ services:
     depends_on:
         - redis 
         - django 
+        - db 
     networks: 
         - c_network
+    volumes: 
+      - shared:/app 
     command: "celery -A backend worker --loglevel=info" 
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
   celery-beat:
     build:
         context: ./backend 
     depends_on:
         - redis 
         - celery 
+        - django 
+        - db 
     networks:
         - c_network
-    command: "celery -A backend beat --loglevel=info"
+    volumes: 
+      - shared:/app 
+    command: "celery -A backend beat --loglevel=DEBUG"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
   celery-flower:
     build:
         context: ./backend
@@ -55,11 +73,21 @@ services:
         - redis 
         - celery 
         - celery-beat 
+        - django 
+        - db 
     networks:
         - c_network
+    volumes: 
+      - shared:/app 
     command: "celery -A backend flower"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
 networks:
     c_network:
         driver: bridge
 volumes:
   postgres_data:
+  shared: 
+  models: 

@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 export const Layout = (props) => {
     const {children} = props; 
     return (
-        <Box height={"100vh"} sx={{overflow:"hidden",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
+        <Box  sx={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}>
             <MyHeader/>
             <MainContainer>
                 {children} 

@@ -52,6 +52,9 @@ export const authOptions = {
     strategy: "jwt",
     maxAge: BACKEND_REFRESH_TOKEN_LIFETIME,
   },
+  pages: {
+    signIn:"/auth/signin"
+  }, 
   providers: [
     CredentialsProvider({
       name: "Credentials",

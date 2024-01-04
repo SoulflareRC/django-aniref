@@ -12,6 +12,7 @@ import LoginIcon from '@mui/icons-material/Login'
 import LogoutIcon from "@mui/icons-material/Logout"
 import ListAltIcon from "@mui/icons-material/ListAlt" 
 import { signIn, signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export function MyHeader() {
 
@@ -63,7 +64,9 @@ export function MyHeader() {
         onClose={handleCloseNavMenu}
 
     >   
-        <MenuItem sx={{width:"100%",border:0}}>
+        <MenuItem sx={{width:"100%",border:0}}
+          component={Link}
+          href="/profile">
             <ListAltIcon/> <Typography mx={1}>My Tasks</Typography> 
         </MenuItem>
         <MenuItem onClick={signOut}>
@@ -78,6 +81,13 @@ export function MyHeader() {
     <Box sx={{ flexGrow: 0, width:"100%" }}>
       <AppBar position="static">
         <Toolbar>
+        <Typography variant='h5' component="a" href="/"
+        sx={{
+          textDecoration:"none",
+          color:"inherit", 
+          fontWeight: 600, 
+          letterSpacing: "0.1em", 
+        }}>Aniref</Typography>
         <Box sx={{ flexGrow: 1, display:'flex' }}>
           <Box sx={{ flexGrow: 1 }} /> 
           <Button variant='white' onClick={handler} startIcon={icon} sx={{ display: { md: 'flex' }, justifyContent:"center", alignItems:"center",  border: 0}}>

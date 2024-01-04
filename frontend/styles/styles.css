@@ -1,0 +1,11 @@
+/* .filepond--panel-root{
+    min-height: 200px;
+} */
+
+.filepond--root{
+  min-height: 200px;
+  height: 100%;
+}
+.filepond--root .filepond--drop-label{
+    height:100%; 
+}

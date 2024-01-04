@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+from celery.schedules import crontab
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -50,6 +53,7 @@ INSTALLED_APPS = [
     "dj_rest_auth",
     "dj_rest_auth.registration",
     'daphne',
+    'django_cleanup.apps.CleanupConfig',
     'django_celery_beat',
     'django_celery_results',
     "django.contrib.sites",
@@ -167,6 +171,17 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_RESULT_EXTENDED = True
 
+CELERY_BEAT_SCHEDULE = {
+    # "beat_task":{
+    #     "task": "beat_task",
+    #     "schedule": 10 # crontab(minute="*/1")
+    # },
+    "cleanup_aniref_tasks":{
+        "task":"app.tasks.cleanup_tasks_aniref",
+        "schedule": crontab(minute="*/1") # crontab(minute="*/1")
+    }
+}
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -223,3 +238,6 @@ SOCIALACCOUNT_PROVIDERS = {
         "VERIFIED_EMAIL": True,
     },
 }
+
+MEDIA_ROOT="/app/media/"
+MEDIA_URL="media/"

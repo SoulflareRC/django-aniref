@@ -4,6 +4,8 @@
 **/staticfiles
 **/mediafiles
 **/__pycache__/
+**/media/ 
+**/test/ 
 /.vscode/
 **/node_modules
 # pycharm
