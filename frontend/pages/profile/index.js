@@ -67,7 +67,7 @@ export default function Home(props) {
       flexDirection: "column",
       borderRadius: 2,
       height: "100%",
-      width: "auto",
+      width: "100%",
       overflow: "auto",
     }}
     elevation={2}

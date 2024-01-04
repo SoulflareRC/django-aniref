@@ -61,9 +61,9 @@ const Task = (props) =>{
             </Grid>
           </Grid>
         </Box>
-        <Box flexGrow={1}  width={"100%"} border={0} py={1} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+        <Box flexGrow={0}  width={"auto"} maxHeight={"auto"} border={0} py={1} display={"flex"} justifyContent={"center"} alignItems={"center"}>
           <Image priority src={img}  alt={"No Ref Image"} width={0} height={0} sizes='35em' 
-          style={{borderWidth:0,borderColor:"black",borderStyle:"solid",borderRadius:3, width:"100%",height:"auto"}}/>
+          style={{borderWidth:0,borderColor:"black",borderStyle:"solid",borderRadius:3, width:"auto",height:"auto"}}/>
         </Box>
     </TaskCardLayout>
   );
