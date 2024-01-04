@@ -38,20 +38,20 @@ import threading
 #     time.sleep(3)
 #     print(f"Task completed!")
 #
-# @app.task(bind=True)
-# def cleanup_tasks_aniref(self):
-#     failed_results = TaskResult.objects.filter(status=celery.states.FAILURE)
-#     failed_ids = failed_results.values_list('task_id',flat=True).distinct()
-#     failed_tasks = models.AnirefTask.objects.filter(task_id__in=failed_ids)
-#     if len(failed_tasks)==0:
-#         print("No failed tasks.")
-#         return
-#     else:
-#         print("Failed tasks:",failed_tasks)
-#         msg = failed_tasks.delete()
-#         print(msg)
-#
-#
+@app.task(bind=True)
+def cleanup_tasks_aniref(self):
+    failed_results = TaskResult.objects.filter(status=celery.states.FAILURE)
+    failed_ids = failed_results.values_list('task_id',flat=True).distinct()
+    failed_tasks = models.AnirefTask.objects.filter(task_id__in=failed_ids)
+    if len(failed_tasks)==0:
+        print("No failed tasks.")
+        return
+    else:
+        print("Failed tasks:",failed_tasks)
+        msg = failed_tasks.delete()
+        print(msg)
+
+
 # @app.task(bind=True)
 # def progress_task(self):
 #     task_id = self.request.id
