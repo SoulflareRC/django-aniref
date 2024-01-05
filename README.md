@@ -19,10 +19,15 @@ as a distributed task queue to process machine learning tasks asynchronously, us
 #### Profile 
 ![img](/demo/profile.png)
 #### Installation 
-This project uses Docker for quick setup. To launch the app, run 
+This project uses Docker for quick setup. To launch the backend, run 
 ```
 docker compose up
 ```
 in the root directory.
+To launch the frontend, run 
+```
+npx next dev 
+```
+in the frontend directory. 
 Then visit `http://127.0.0.1:3000` for the app. 
 You can also visit flower at `http://127.0.0.1:5555` to monitor the celery tasks. 
