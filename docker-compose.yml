@@ -25,6 +25,23 @@ services:
     networks:
       - c_network 
     command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py makemigrations app && python manage.py migrate && python manage.py runserver 0.0.0.0:8000" 
+    healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8000/healthcheck/"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+  frontend: 
+    build: 
+        context: ./frontend 
+    ports: 
+       - "3000:3000" 
+    depends_on:
+       - django 
+    volumes: 
+       - shared-frontend:/frontend 
+    networks: 
+      - c_network 
+    command: sh -c "npx next dev" 
   redis:
     image: redis 
     ports: 
@@ -35,9 +52,12 @@ services:
     build:
         context: ./backend
     depends_on:
-        - redis 
-        - django 
-        - db 
+        django: 
+            condition: service_healthy 
+        redis:
+            condition: service_started 
+        db:
+            condition: service_started 
     networks: 
         - c_network
     volumes: 
@@ -51,10 +71,14 @@ services:
     build:
         context: ./backend 
     depends_on:
-        - redis 
-        - celery 
-        - django 
-        - db 
+        django: 
+            condition: service_healthy 
+        redis: 
+            condition: service_started 
+        celery:
+            condition: service_started 
+        db:
+            condition: service_started         
     networks:
         - c_network
     volumes: 
@@ -90,4 +114,6 @@ networks:
 volumes:
   postgres_data:
   shared: 
+  shared-frontend:
   models: 
+  
