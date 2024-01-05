@@ -30,18 +30,6 @@ services:
             interval: 30s
             timeout: 10s
             retries: 5
-  frontend: 
-    build: 
-        context: ./frontend 
-    ports: 
-       - "3000:3000" 
-    depends_on:
-       - django 
-    volumes: 
-       - shared-frontend:/frontend 
-    networks: 
-      - c_network 
-    command: sh -c "npx next dev" 
   redis:
     image: redis 
     ports: 

@@ -74,6 +74,7 @@ const Index = () => {
     let data = new FormData(e.target); 
     console.log(data.get("ref_img"),data.get("vid")); 
     const taskURL=ENDPOINTS.TASKS.ANIREF();  
+    console.log(taskURL); 
     const response = await axios.post(taskURL,data); 
     console.log(response.data); 
     console.log(response.status); 

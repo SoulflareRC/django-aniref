@@ -20,14 +20,14 @@ const Task = (props) =>{
     const [val,setVal] = useState(null);
     const [state,setState] = useState(props.state); 
     const flag = false; 
-    const ws_url = `ws://localhost:8000/ws/app/tasks/aniref/${id}/`;
+    const ws_url = ENDPOINTS.WS.ANIREF(`${id}/`) // `ws://localhost:8000/ws/app/tasks/aniref/${id}/`;
     console.log(state); 
     useEffect(()=>{
       const socket = new WebSocket(ws_url);
       socket.onmessage=(msg)=>{
         let data = JSON.parse(msg.data);
-        console.log("Received message for task id:",id);
-        console.log(data);  
+        // console.log("Received message for task id:",id);
+        console.log("Received message:",data);  
         setState(data.info.message);
         if(data.info?.status=="SUCCESS"){
           console.log(router.asPath,router.pathname)
@@ -74,9 +74,9 @@ export default Task;
 export async function getServerSideProps(context) {
     const {resolvedUrl} = context; 
     const task_id = context.params.id; 
-    const response = await fetch(ENDPOINTS.TASKS.ANIREF(`?task_id=${task_id}`)); 
+    const response = await fetch(ENDPOINTS.TASKS.ANIREF(`?task_id=${task_id}`,true)); 
     const data = (await response.json())[0];
-    // console.log(data);  
+    console.log(data);  
     if(!data) return {props:{}}
     const task_state = data.task_result.status; 
     // console.log(`Status of task ${task_id}:${task_state}`); 

@@ -57,7 +57,7 @@ export default function Home(props) {
                     if(!task)return null; 
                     const {task_id,ref_img,name,status,date} = task; 
                     return (
-                        <Grid item xs={3} height={"auto"} border={0}>
+                        <Grid key={idx} item xs={3} height={"auto"} border={0}>
       <CardActionArea href={`/tasks/aniref/${task_id}`} sx={{border:0,flexGrow:1, position: "relative", display:"flex", flexDirection:"column",height:"100%",width:"100%" }}>
   <Card
     sx={{
@@ -176,7 +176,7 @@ export async function getServerSideProps(context) {
     }else{
         const user_id = session.user.pk; 
         console.log(user_id); 
-        const response = await axios.get(ENDPOINTS.TASKS.ANIREF(`?user=${user_id}`));
+        const response = await axios.get(ENDPOINTS.TASKS.ANIREF(`?user=${user_id}`,false));
         const data = await response.data;  
         console.log("Response data:", data); 
         const tasks = data.map(item=>{

@@ -20,24 +20,7 @@ const Task = (props) =>{
     const {id,img,video,date,results} = props; 
     const [val,setVal] = useState(null);
     const [state,setState] = useState(props.state); 
-    const ws_url = "ws://localhost:8000/ws/app/progress/";
     console.log(state); 
-    useEffect(()=>{
-      
-      const socket = new WebSocket(ws_url);
-      socket.onmessage=(msg)=>{
-        let data = JSON.parse(msg.data);
-        data= data.message; 
-        const taskID = data.task_id; 
-        console.log("Received message for task id:",taskID); 
-        if(taskID==id){ 
-          setVal(data.progress);
-        } 
-      }; 
-      return ()=>{
-        socket.close();
-      }
-    },[]); 
 
     const [idx,setIdx] = useState(-1); 
     const photos = results.map(item=>{
@@ -129,7 +112,7 @@ export default Task;
 export async function getServerSideProps(context) {
     
     const task_id = context.params.id; 
-    const response = await fetch(ENDPOINTS.TASKS.ANIREF(`?task_id=${task_id}`)); 
+    const response = await fetch(ENDPOINTS.TASKS.ANIREF(`?task_id=${task_id}`,true)); 
     const data = (await response.json())[0];  
     const {name,ref_img, video, results} = data; 
     const task_state = data.task_result.status;
